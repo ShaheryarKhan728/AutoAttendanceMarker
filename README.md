@@ -31,7 +31,7 @@ An automation tool designed **exclusively for employees using Harmony by Softcom
   - Limited background activity
   - Location fetched **only during office hours** and **only if attendance not yet marked**
   - No continuous GPS tracking or unnecessary polling
-- ⚙️ Background service is lightweight and efficient
+  - ⚙️ Background service is lightweight and efficient
 
 **📲 Required Permissions**
 
