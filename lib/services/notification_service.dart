@@ -3,14 +3,14 @@ import '../services/harmony_automation_service.dart';
 import '../services/location_service.dart';
 
 class NotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+  static final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     final initSettings = InitializationSettings(android: androidSettings);
 
-    await _notificationsPlugin.initialize(
+    await notificationsPlugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (response) async {
         if (response.payload == 'MARK_ATTENDANCE') {
@@ -33,7 +33,7 @@ class NotificationService {
     );
 
     final androidPlugin =
-        _notificationsPlugin.resolvePlatformSpecificImplementation<
+        notificationsPlugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
     await androidPlugin?.createNotificationChannel(channel);
   }
@@ -50,7 +50,7 @@ class NotificationService {
 
     const platformDetails = NotificationDetails(android: androidDetails);
 
-    await _notificationsPlugin.show(
+    await notificationsPlugin.show(
       0,
       '📍 You\'re at the office!',
       'Tap to mark your attendance',

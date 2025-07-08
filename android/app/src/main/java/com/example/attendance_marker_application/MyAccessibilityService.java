@@ -167,13 +167,13 @@ public class MyAccessibilityService extends AccessibilityService {
     private void logAllClickableNodes(AccessibilityNodeInfo node) {
         if (node == null) return;
 
-        if (node.isClickable()) {
-            // Log.d("ClickableNode", "Node: " + node +
-                    "\nText: " + node.getText() +
-                    "\nContentDesc: " + node.getContentDescription() +
-                    "\nClass: " + node.getClassName() +
-                    "\nID: " + node.getViewIdResourceName());
-        }
+        // if (node.isClickable()) {
+        //     Log.d("ClickableNode", "Node: " + node +
+        //             "\nText: " + node.getText() +
+        //             "\nContentDesc: " + node.getContentDescription() +
+        //             "\nClass: " + node.getClassName() +
+        //             "\nID: " + node.getViewIdResourceName());
+        // }
 
         for (int i = 0; i < node.getChildCount(); i++) {
             AccessibilityNodeInfo child = node.getChild(i);

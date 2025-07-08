@@ -4,7 +4,8 @@ import 'services/notification_service.dart';
 import 'services/background_service.dart';
 import 'screens/home_screen.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/services.dart';
+import 'services/harmony_automation_service.dart';
+import 'services/location_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -13,11 +14,11 @@ void main() async {
 
   // 1. Notification permission
   final notificationStatus = await Permission.notification.request();
-  if (!notificationStatus.isGranted) {
-    // debugPrint("❌ Notification permission not granted");
-  } else {
-    // debugPrint("✅ Notification permission granted");
-  }
+  // if (!notificationStatus.isGranted) {
+  //   debugPrint("❌ Notification permission not granted");
+  // } else {
+  //   debugPrint("✅ Notification permission granted");
+  // }
 
   // 2. Location permission
   LocationPermission locationPermission = await Geolocator.checkPermission();
@@ -26,31 +27,21 @@ void main() async {
     locationPermission = await Geolocator.requestPermission();
   }
 
-  if (locationPermission == LocationPermission.denied) {
-    // debugPrint("❌ Location permission not granted");
-  } else {
-    // debugPrint("✅ Location permission granted");
+  // 3. NotificationService init
+  final notificationService = NotificationService();
+  final launchDetails =
+      await NotificationService.notificationsPlugin.getNotificationAppLaunchDetails();
+
+  final launchedFromNoti = launchDetails?.didNotificationLaunchApp ?? false;
+
+  if (launchedFromNoti &&
+      launchDetails?.notificationResponse?.payload == 'MARK_ATTENDANCE') {
+    // 🔁 Handle tap on notification (cold start)
+    await HarmonyAutomationService().markAttendance();
+    final now = DateTime.now().toUtc().add(const Duration(hours: 5));
+    await LocationService().setMarkedToday(now);
   }
 
-  // // 3. Check and Redirect to Accessibility Settings
-  // const platform = MethodChannel('com.attendance.marker/accessibility');
-  // bool isAccessibilityEnabled = false;
-  // try {
-  //   isAccessibilityEnabled =
-  //       await platform.invokeMethod('isAccessibilityEnabled');
-  // } on PlatformException catch (e) {
-  //   debugPrint("❌ Failed to check accessibility status: ${e.message}");
-  // }
-
-  // if (!isAccessibilityEnabled) {
-  //   debugPrint("🔁 Redirecting to accessibility settings...");
-  //   await openAppSettings(); // This opens the general settings screen
-  // } else {
-  //   debugPrint("✅ Accessibility already enabled");
-  // }
-
-  // Initialize Notification Service
-  final notificationService = NotificationService();
   await notificationService.init();
 
   // Start background logic

@@ -38,7 +38,7 @@ void onStart(ServiceInstance service) async {
 
   final locationService = LocationService();
 
-  Timer.periodic(const Duration(seconds: 60), (timer) async {
+  Timer.periodic(const Duration(minutes: 10), (timer) async {
     try {
       final pkTime = DateTime.now().toUtc().add(Duration(hours: 5));
 if (pkTime.weekday < 6 && pkTime.hour >= 7 && pkTime.hour < 12) {
